@@ -15,8 +15,11 @@ export const featureImports: Record<FeatureKey, () => Promise<unknown>> = {
   forms:     () => import('@/features/forms'),
   users:     () => import('@/features/users'),
   roles:     () => import('@/features/roles'),
-  activity:  () => import('@/features/activity'),
-  profile:   () => import('@/features/profile'),
+  activity:       () => import('@/features/activity'),
+  notifications:  () => import('@/features/notifications'),
+  calendar:       () => import('@/features/calendar'),
+  kanban:         () => import('@/features/kanban'),
+  profile:        () => import('@/features/profile'),
   uiKit:     () => import('@/features/ui-kit'),
   settings:  () => import('@/features/settings'),
 }

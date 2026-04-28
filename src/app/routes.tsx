@@ -16,6 +16,9 @@ const ChartsPage = lazy(() => featureImports.charts().then((m: any) => ({ defaul
 const UsersPage = lazy(() => featureImports.users().then((m: any) => ({ default: m.UsersPage })))
 const RolesPage = lazy(() => featureImports.roles().then((m: any) => ({ default: m.RolesPage })))
 const ActivityPage = lazy(() => featureImports.activity().then((m: any) => ({ default: m.ActivityPage })))
+const NotificationsPage = lazy(() => featureImports.notifications().then((m: any) => ({ default: m.NotificationsPage })))
+const CalendarPage = lazy(() => featureImports.calendar().then((m: any) => ({ default: m.CalendarPage })))
+const KanbanPage = lazy(() => featureImports.kanban().then((m: any) => ({ default: m.KanbanPage })))
 const ProfilePage = lazy(() => featureImports.profile().then((m: any) => ({ default: m.ProfilePage })))
 const AdvancedTablePage = lazy(() => featureImports.table().then((m: any) => ({ default: m.AdvancedTablePage })))
 const OrderDetailPage = lazy(() => featureImports.table().then((m: any) => ({ default: m.OrderDetailPage })))
@@ -62,6 +65,9 @@ export function AppRoutes() {
         {features.users && <Route path="users" element={<Lazy><UsersPage /></Lazy>} />}
         {features.roles && <Route path="roles" element={<Lazy><RolesPage /></Lazy>} />}
         {features.activity && <Route path="activity" element={<Lazy><ActivityPage /></Lazy>} />}
+        {features.notifications && <Route path="notifications" element={<Lazy><NotificationsPage /></Lazy>} />}
+        {features.calendar && <Route path="calendar" element={<Lazy><CalendarPage /></Lazy>} />}
+        {features.kanban && <Route path="kanban" element={<Lazy><KanbanPage /></Lazy>} />}
         {features.profile && <Route path="profile" element={<Lazy><ProfilePage /></Lazy>} />}
         {features.uiKit && <Route path="ui-kit" element={<Lazy><UIKitPage /></Lazy>} />}
         {features.settings && <Route path="settings" element={<Lazy><SettingsPage /></Lazy>} />}

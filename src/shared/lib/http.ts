@@ -73,6 +73,11 @@ async function request<T>(method: HttpMethod, path: string, options: RequestOpti
   })
 
   if (!response.ok) {
+    if (response.status === 401 && !skipAuth) {
+      await authAdapter.logout()
+      window.location.href = '/login'
+    }
+
     const errorBody = await parseBody(response).catch(() => null)
     const message =
       (errorBody && typeof errorBody === 'object' && 'message' in errorBody && typeof errorBody.message === 'string'

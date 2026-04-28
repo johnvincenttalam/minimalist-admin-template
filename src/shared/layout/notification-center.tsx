@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { Bell, UserPlus, AlertTriangle, CheckCircle2, Info, Clock } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { useClickOutside } from '@/shared/hooks/use-click-outside'
@@ -118,9 +119,13 @@ export function NotificationCenter() {
 
           {/* Footer */}
           <div className="px-4 py-2.5 border-t border-zinc-100 text-center">
-            <button className="text-[12px] font-medium text-zinc-500 hover:text-zinc-700 transition-colors">
+            <Link
+              to="/admin/notifications"
+              onClick={() => setOpen(false)}
+              className="text-[12px] font-medium text-zinc-500 hover:text-zinc-700 transition-colors"
+            >
               View all notifications
-            </button>
+            </Link>
           </div>
         </div>
       )}

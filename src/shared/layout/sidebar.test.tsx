@@ -14,6 +14,9 @@ vi.mock('@/config/features', async () => {
       users: true,
       roles: true,
       activity: true,
+      notifications: true,
+      calendar: true,
+      kanban: true,
       profile: true,
       uiKit: true,
       settings: true,
@@ -41,7 +44,8 @@ describe('Sidebar', () => {
   beforeEach(() => {
     enabledFlags = {
       dashboard: true, charts: true, table: true, forms: true,
-      users: true, roles: true, activity: true, profile: true,
+      users: true, roles: true, activity: true, notifications: true,
+      calendar: true, kanban: true, profile: true,
       uiKit: true, settings: true,
     }
   })

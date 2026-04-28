@@ -49,7 +49,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 }))
 
-// Kick off restore on module load. Runs once, non-blocking.
-if (typeof window !== 'undefined') {
+/**
+ * Call once at app startup (e.g. in providers.tsx) to restore the session.
+ * Separated from module scope so the call site is explicit and testable.
+ */
+export function initAuth() {
   useAuthStore.getState().restore()
 }
