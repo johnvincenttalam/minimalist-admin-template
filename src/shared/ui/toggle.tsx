@@ -27,7 +27,7 @@ export function Toggle({ checked, onChange, disabled, size = 'md', className }: 
       className={cn(
         'rounded-full relative transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed',
         track,
-        checked ? 'bg-zinc-900' : 'bg-zinc-200',
+        checked ? 'bg-accent' : 'bg-zinc-200',
         className
       )}
     >

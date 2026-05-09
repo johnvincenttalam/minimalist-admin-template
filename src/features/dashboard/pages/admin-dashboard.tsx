@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Users, Activity, TrendingUp, CheckCircle2 } from 'lucide-react'
-import { useAuthStore } from '@/features/auth/store/auth-store'
+import { useAuth } from '@/features/auth/store/auth-store'
 import { StatCard } from '@/shared/ui/stat-card'
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card'
 import { format } from 'date-fns'
@@ -15,7 +15,7 @@ const itemVariants = {
 }
 
 export function AdminDashboard() {
-  const { user } = useAuthStore()
+  const { user } = useAuth()
 
   return (
     <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="show">

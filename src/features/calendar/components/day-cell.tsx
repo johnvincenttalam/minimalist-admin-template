@@ -19,11 +19,17 @@ export function DayCell({ date, currentMonth, events, onClickDay, onClickEvent }
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label={`Add event for ${format(date, 'MMMM d, yyyy')}`}
       className={cn(
-        'min-h-[100px] border-b border-r border-zinc-100 p-1.5 cursor-pointer transition-colors hover:bg-zinc-50/50',
+        'min-h-[100px] border-b border-r border-zinc-100 p-1.5 cursor-pointer transition-colors hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-accent/30',
         !inMonth && 'bg-zinc-50/30',
       )}
       onClick={() => onClickDay(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClickDay(date) }
+      }}
     >
       <div className="flex items-center justify-center mb-1">
         <span

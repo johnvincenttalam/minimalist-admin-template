@@ -27,14 +27,14 @@ export function FilterChips<T extends string>({ value, onChange, options, classN
           className={cn(
             'rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5',
             padding,
-            value === opt.value ? 'bg-zinc-900 text-white' : 'text-zinc-500 hover:bg-zinc-100'
+            value === opt.value ? 'bg-accent text-accent-fg' : 'text-zinc-500 hover:bg-zinc-100'
           )}
         >
           {opt.label}
           {opt.count !== undefined && (
             <span className={cn(
               'inline-flex items-center justify-center min-w-[18px] px-1 rounded-full text-[10px] font-semibold',
-              value === opt.value ? 'bg-white/20 text-white' : 'bg-zinc-200/60 text-zinc-500'
+              value === opt.value ? 'bg-accent-fg/20 text-accent-fg' : 'bg-zinc-200/60 text-zinc-500'
             )}>
               {opt.count}
             </span>

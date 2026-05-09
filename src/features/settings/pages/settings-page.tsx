@@ -4,7 +4,7 @@ import { cn } from '@/shared/utils/cn'
 import { PageHeader } from '@/shared/ui/page-header'
 import { Card, CardContent } from '@/shared/ui/card'
 import { Toggle } from '@/shared/ui/toggle'
-import { useThemeStore } from '@/shared/stores/theme-store'
+import { useTheme } from '@/shared/stores/theme-store'
 import { ACCENTS, accentSwatches } from '@/config/theme'
 
 const tabs = [
@@ -18,7 +18,7 @@ const tabs = [
 export function SettingsPage() {
   const [activeTab, setActiveTab] = useState('general')
   const [notifications, setNotifications] = useState({ email: true, sms: false, push: true, updates: true, marketing: false })
-  const { accent, setAccent, theme, setTheme } = useThemeStore()
+  const { accent, setAccent, theme, setTheme } = useTheme()
 
   return (
     <div>

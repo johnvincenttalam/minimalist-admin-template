@@ -1,28 +1,22 @@
 import { isToday, isYesterday, formatDistanceToNow } from 'date-fns'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, Trash2, Info, AlertTriangle, CheckCheck, AlertOctagon } from 'lucide-react'
+import { CheckCircle2, Trash2, Info, AlertTriangle, CheckCheck, AlertOctagon, type LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import { IconTile } from '@/shared/ui/icon-tile'
 import type { Notification, NotificationType } from '../types'
 
-const typeIcon: Record<NotificationType, React.ElementType> = {
+const typeIcon: Record<NotificationType, LucideIcon> = {
   info: Info,
   warning: AlertTriangle,
   success: CheckCircle2,
   danger: AlertOctagon,
 }
 
-const typeIconBg: Record<NotificationType, string> = {
-  info: 'bg-blue-50',
-  warning: 'bg-amber-50',
-  success: 'bg-emerald-50',
-  danger: 'bg-red-50',
-}
-
-const typeIconColor: Record<NotificationType, string> = {
-  info: 'text-blue-600',
-  warning: 'text-amber-500',
-  success: 'text-emerald-600',
-  danger: 'text-red-500',
+const typeTone: Record<NotificationType, 'blue' | 'amber' | 'emerald' | 'red'> = {
+  info: 'blue',
+  warning: 'amber',
+  success: 'emerald',
+  danger: 'red',
 }
 
 const typeDot: Record<NotificationType, string> = {
@@ -77,13 +71,11 @@ export function NotificationList({ notifications, onMarkRead, onDelete }: Notifi
                   exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
                   transition={{ duration: 0.2 }}
                   className={cn(
-                    'flex items-start gap-3 px-4 py-3 border-b border-zinc-50 transition-colors hover:bg-zinc-50/50 group',
+                    'flex items-start gap-3 px-4 py-3 border-b border-zinc-50 transition-colors hover:bg-zinc-50 group',
                     !n.read && 'bg-zinc-50/30'
                   )}
                 >
-                  <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5', typeIconBg[n.type])}>
-                    <Icon className={cn('w-4 h-4', typeIconColor[n.type])} />
-                  </div>
+                  <IconTile icon={Icon} size="sm" tone={typeTone[n.type]} className="mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <p className={cn('text-[13px] truncate', n.read ? 'text-zinc-600' : 'font-medium text-zinc-900')}>

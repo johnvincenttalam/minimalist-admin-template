@@ -1,5 +1,6 @@
 import type { User } from '@/features/users/types'
 import { mockUsers } from '@/features/users/data/mock-users'
+import { storage } from '@/shared/lib/storage'
 import type { AuthAdapter } from './auth-adapter'
 
 const STORAGE_KEY = 'mock-auth-user-id'
@@ -14,23 +15,23 @@ export const mockAuthAdapter: AuthAdapter = {
   async login(email: string, _password: string): Promise<User | null> {
     const user = mockUsers.find((u) => u.email === email)
     if (user) {
-      localStorage.setItem(STORAGE_KEY, user.id)
+      storage.set(STORAGE_KEY, user.id)
       return user
     }
     return null
   },
 
   async logout(): Promise<void> {
-    localStorage.removeItem(STORAGE_KEY)
+    storage.remove(STORAGE_KEY)
   },
 
   async getCurrentUser(): Promise<User | null> {
-    const id = localStorage.getItem(STORAGE_KEY)
+    const id = storage.get<string | null>(STORAGE_KEY, null)
     if (!id) return null
     return mockUsers.find((u) => u.id === id) ?? null
   },
 
   getToken(): string | null {
-    return localStorage.getItem(STORAGE_KEY)
+    return storage.get<string | null>(STORAGE_KEY, null)
   },
 }

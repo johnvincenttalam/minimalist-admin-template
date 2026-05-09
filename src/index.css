@@ -195,6 +195,32 @@
   /* Row actions dropdown in dark mode */
   .dark .hover\:bg-red-50:hover { background-color: rgba(239, 68, 68, 0.10) !important; }
 
+  /* Alpha-variant tints not covered by base-class overrides above. Tailwind
+     emits each /N variant as its own class, so .dark .bg-zinc-50 doesn't
+     match .bg-zinc-50\/60. */
+  .dark .bg-zinc-50\/60   { background-color: rgba(39, 39, 42, 0.6) !important; }
+  .dark .bg-zinc-200\/50  { background-color: rgba(63, 63, 70, 0.5) !important; }
+  .dark .bg-zinc-200\/60  { background-color: rgba(63, 63, 70, 0.6) !important; }
+  .dark .bg-blue-50\/40   { background-color: rgba(59, 130, 246, 0.10) !important; }
+  .dark .border-zinc-200\/80 { border-color: rgba(63, 63, 70, 0.8) !important; }
+
+  /* divide-* uses a sibling selector, not a per-child .border-* class, so
+     .dark .border-zinc-100 doesn't reach it. Mirror the override here. */
+  .dark .divide-zinc-100 > :not([hidden]) ~ :not([hidden]) { border-color: #27272a !important; }
+  .dark .divide-zinc-200 > :not([hidden]) ~ :not([hidden]) { border-color: #3f3f46 !important; }
+
+  /* Recharts uses inline SVG presentation attributes and inline tooltipStyle
+     which Tailwind classes can't reach. !important on stable Recharts class
+     names wins over both attribute and inline-style values. */
+  .dark .recharts-cartesian-grid line       { stroke: #27272a !important; }
+  .dark .recharts-cartesian-axis-tick-value { fill:   #71717a !important; }
+  .dark .recharts-text                      { fill:   #a1a1aa !important; }
+  .dark .recharts-default-tooltip {
+    background-color: #18181b !important;
+    border-color:     #3f3f46 !important;
+    color:            #e4e4e7 !important;
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -237,6 +263,11 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
-    padding-right: 36px;
+  }
+
+  /* Higher specificity (0,1,1) than Tailwind's .pr-* / .px-* utilities (0,1,0)
+     so the chevron's reserve space sticks even when callers add padding classes. */
+  select:not([multiple]) {
+    padding-right: 2.25rem;
   }
 }

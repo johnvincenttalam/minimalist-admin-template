@@ -16,8 +16,7 @@ import {
   type RowSelectionState,
 } from '@tanstack/react-table'
 import {
-  Download, Trash2, ChevronLeft, ChevronRight,
-  ChevronsLeft, ChevronsRight, Eye, Columns3, ArrowUpDown, ArrowUp, ArrowDown, X,
+  Download, Trash2, Eye, Columns3, ArrowUpDown, ArrowUp, ArrowDown, X,
 } from 'lucide-react'
 import { PageHeader } from '@/shared/ui/page-header'
 import { Card, CardContent } from '@/shared/ui/card'
@@ -27,6 +26,10 @@ import { Avatar } from '@/shared/ui/avatar'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { Checkbox } from '@/shared/ui/checkbox'
 import { SearchInput } from '@/shared/ui/search-input'
+import { Popover } from '@/shared/ui/popover'
+import { MenuItem } from '@/shared/ui/menu'
+import { SelectMenu } from '@/shared/ui/select-menu'
+import { TablePagination } from '@/shared/ui/table-pagination'
 import { exportToCSV } from '@/shared/utils/export-csv'
 import { formatCurrency } from '@/shared/utils/format'
 import { mockOrders, type Order } from '@/features/orders'
@@ -42,7 +45,6 @@ export function AdvancedTablePage() {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
-  const [columnsMenuOpen, setColumnsMenuOpen] = useState(false)
 
   const columns = useMemo<ColumnDef<Order>[]>(() => [
     {
@@ -195,48 +197,42 @@ export function AdvancedTablePage() {
             />
 
             {/* Status filter */}
-            <select
+            <SelectMenu
               value={statusFilter}
-              onChange={(e) => setColumnFilter('status', e.target.value)}
-              className="h-10 px-3 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-400"
-            >
-              <option value="">All statuses</option>
-              {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-            </select>
+              onChange={(v) => setColumnFilter('status', v)}
+              placeholder="All statuses"
+              options={STATUS_OPTIONS.map((s) => ({ value: s, label: s }))}
+            />
 
             {/* Region filter */}
-            <select
+            <SelectMenu
               value={regionFilter}
-              onChange={(e) => setColumnFilter('region', e.target.value)}
-              className="h-10 px-3 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-400"
-            >
-              <option value="">All regions</option>
-              {REGION_OPTIONS.map((r) => <option key={r} value={r}>{r}</option>)}
-            </select>
+              onChange={(v) => setColumnFilter('region', v)}
+              placeholder="All regions"
+              options={REGION_OPTIONS.map((r) => ({ value: r, label: r }))}
+            />
 
             {/* Columns toggle */}
-            <div className="relative">
-              <Button variant="outline" leftIcon={<Columns3 className="w-4 h-4" />} onClick={() => setColumnsMenuOpen((o) => !o)}>
-                Columns
-              </Button>
-              {columnsMenuOpen && (
-                <>
-                  <div className="fixed inset-0 z-10" onClick={() => setColumnsMenuOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-zinc-200 rounded-lg py-1 z-20">
-                    {table.getAllColumns().filter((c) => c.getCanHide()).map((column) => (
-                      <button
-                        key={column.id}
-                        onClick={() => column.toggleVisibility(!column.getIsVisible())}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-zinc-700 hover:bg-zinc-50 transition-colors"
-                      >
-                        <Checkbox checked={column.getIsVisible()} onChange={() => column.toggleVisibility(!column.getIsVisible())} />
-                        <span className="capitalize">{column.id.replace(/([A-Z])/g, ' $1').trim()}</span>
-                      </button>
-                    ))}
-                  </div>
-                </>
+            <Popover
+              align="right"
+              width="w-52"
+              panelClassName="py-1"
+              trigger={({ toggle }) => (
+                <Button variant="outline" leftIcon={<Columns3 className="w-4 h-4" />} onClick={toggle}>
+                  Columns
+                </Button>
               )}
-            </div>
+            >
+              {table.getAllColumns().filter((c) => c.getCanHide()).map((column) => (
+                <MenuItem
+                  key={column.id}
+                  leading={<Checkbox checked={column.getIsVisible()} onChange={() => column.toggleVisibility(!column.getIsVisible())} />}
+                  onClick={() => column.toggleVisibility(!column.getIsVisible())}
+                >
+                  <span className="capitalize">{column.id.replace(/([A-Z])/g, ' $1').trim()}</span>
+                </MenuItem>
+              ))}
+            </Popover>
           </div>
 
           {hasFilters && (
@@ -259,14 +255,14 @@ export function AdvancedTablePage() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mb-4 flex items-center justify-between gap-3 p-3 rounded-lg bg-zinc-900 text-white"
+            className="mb-4 flex items-center justify-between gap-3 p-3 rounded-lg bg-accent text-accent-fg"
           >
             <span className="text-[13px] font-medium">{selectedCount} selected</span>
             <div className="flex items-center gap-2">
-              <Button size="sm" variant="ghost" className="text-white hover:bg-white/10" leftIcon={<Eye className="w-3.5 h-3.5" />} onClick={() => toast.info(`Viewing ${selectedCount} items`)}>
+              <Button size="sm" variant="ghost" className="text-accent-fg hover:bg-accent-fg/10" leftIcon={<Eye className="w-3.5 h-3.5" />} onClick={() => toast.info(`Viewing ${selectedCount} items`)}>
                 View
               </Button>
-              <Button size="sm" variant="ghost" className="text-white hover:bg-white/10" leftIcon={<Download className="w-3.5 h-3.5" />} onClick={() => {
+              <Button size="sm" variant="ghost" className="text-accent-fg hover:bg-accent-fg/10" leftIcon={<Download className="w-3.5 h-3.5" />} onClick={() => {
                 exportToCSV(selectedRows, 'selected-orders', [
                   { key: 'reference', label: 'Order' },
                   { key: 'customer', label: 'Customer' },
@@ -282,7 +278,7 @@ export function AdvancedTablePage() {
               }}>
                 Delete
               </Button>
-              <button onClick={() => setRowSelection({})} className="text-white/70 hover:text-white p-1">
+              <button onClick={() => setRowSelection({})} className="text-accent-fg/70 hover:text-accent-fg p-1">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -331,7 +327,7 @@ export function AdvancedTablePage() {
                   <tr
                     key={row.id}
                     className={cn(
-                      'border-b border-zinc-100/60 hover:bg-zinc-50/60 transition-colors',
+                      'border-b border-zinc-100/60 hover:bg-zinc-50 transition-colors',
                       row.getIsSelected() && 'bg-blue-50/40'
                     )}
                   >
@@ -353,55 +349,7 @@ export function AdvancedTablePage() {
             </table>
           </div>
 
-          {/* Pagination */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-t border-zinc-100">
-            <div className="flex items-center gap-4">
-              <span className="text-[12px] text-zinc-500">
-                Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-                {' · '}
-                {table.getFilteredRowModel().rows.length} rows
-              </span>
-              <select
-                value={table.getState().pagination.pageSize}
-                onChange={(e) => table.setPageSize(Number(e.target.value))}
-                className="h-8 px-2 text-xs border border-zinc-200 rounded-md bg-white focus:outline-none"
-              >
-                {[10, 20, 50, 100].map((size) => (
-                  <option key={size} value={size}>{size} / page</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => table.firstPage()}
-                disabled={!table.getCanPreviousPage()}
-                className="p-2 rounded-md border border-zinc-200 text-zinc-500 hover:bg-zinc-50 disabled:opacity-30"
-              >
-                <ChevronsLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-                className="p-2 rounded-md border border-zinc-200 text-zinc-500 hover:bg-zinc-50 disabled:opacity-30"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-                className="p-2 rounded-md border border-zinc-200 text-zinc-500 hover:bg-zinc-50 disabled:opacity-30"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => table.lastPage()}
-                disabled={!table.getCanNextPage()}
-                className="p-2 rounded-md border border-zinc-200 text-zinc-500 hover:bg-zinc-50 disabled:opacity-30"
-              >
-                <ChevronsRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <TablePagination table={table} mode="full" />
         </CardContent>
       </Card>
     </div>

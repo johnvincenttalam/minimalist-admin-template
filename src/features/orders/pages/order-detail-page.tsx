@@ -13,6 +13,7 @@ import { StatusBadge } from '@/shared/ui/status-badge'
 import { Avatar } from '@/shared/ui/avatar'
 import { Tabs } from '@/shared/ui/tabs'
 import { EmptyState } from '@/shared/ui/empty-state'
+import { IconTile } from '@/shared/ui/icon-tile'
 import { mockOrders, type Order } from '@/features/orders'
 import { formatCurrency } from '@/shared/utils/format'
 import { cn } from '@/shared/utils/cn'
@@ -61,9 +62,7 @@ export function OrderDetailPage() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="flex items-start gap-4 min-w-0">
-              <div className="w-12 h-12 rounded-xl bg-zinc-100 flex items-center justify-center flex-shrink-0">
-                <Package className="w-6 h-6 text-zinc-500" />
-              </div>
+              <IconTile icon={Package} size="lg" />
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h1 className="text-lg font-semibold text-zinc-900 font-mono">{order.reference}</h1>
@@ -137,9 +136,9 @@ export function OrderDetailPage() {
                 <table className="w-full">
                   <thead className="bg-zinc-50/50 border-y border-zinc-100">
                     <tr>
-                      <th className="px-6 py-2.5 text-left text-[11px] font-medium text-zinc-400 uppercase">Product</th>
-                      <th className="px-6 py-2.5 text-right text-[11px] font-medium text-zinc-400 uppercase">Qty</th>
-                      <th className="px-6 py-2.5 text-right text-[11px] font-medium text-zinc-400 uppercase">Amount</th>
+                      <th className="px-6 py-2.5 text-left text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Product</th>
+                      <th className="px-6 py-2.5 text-right text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Qty</th>
+                      <th className="px-6 py-2.5 text-right text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -240,9 +239,7 @@ export function OrderDetailPage() {
               <ul>
                 {related.map((r, i) => (
                   <li key={r.id} className={cn('flex items-center gap-4 px-6 py-3', i !== related.length - 1 && 'border-b border-zinc-100/60')}>
-                    <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0">
-                      <Package className="w-4 h-4 text-zinc-500" />
-                    </div>
+                    <IconTile icon={Package} />
                     <div className="flex-1 min-w-0">
                       <Link to={`/admin/table/${r.id}`} className="text-[13px] font-medium font-mono text-zinc-900 hover:text-blue-600">
                         {r.reference}

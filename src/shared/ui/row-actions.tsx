@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { MoreHorizontal, Eye, Pencil, Trash2 } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { toast } from 'sonner'
+import { MenuItem } from './menu'
 
 interface RowActionsProps {
   onView?: () => void
@@ -85,31 +86,19 @@ export function RowActions({ onView, onEdit, onDelete, className }: RowActionsPr
           className="bg-white rounded-lg border border-zinc-200/60 py-1 z-50"
         >
           {onView && (
-            <button
-              onClick={() => { setOpen(false); onView() }}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 text-[13px] text-zinc-600 hover:bg-zinc-50 transition-colors"
-            >
-              <Eye className="w-3.5 h-3.5" />
+            <MenuItem icon={Eye} density="compact" onClick={() => { setOpen(false); onView() }}>
               View
-            </button>
+            </MenuItem>
           )}
           {onEdit && (
-            <button
-              onClick={() => { setOpen(false); onEdit() }}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 text-[13px] text-zinc-600 hover:bg-zinc-50 transition-colors"
-            >
-              <Pencil className="w-3.5 h-3.5" />
+            <MenuItem icon={Pencil} density="compact" onClick={() => { setOpen(false); onEdit() }}>
               Edit
-            </button>
+            </MenuItem>
           )}
           {onDelete && (
-            <button
-              onClick={handleDelete}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
+            <MenuItem icon={Trash2} density="compact" tone="danger" onClick={handleDelete}>
               Delete
-            </button>
+            </MenuItem>
           )}
         </div>,
         document.body,

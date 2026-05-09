@@ -6,6 +6,7 @@ import { Input } from '@/shared/ui/input'
 import { Select } from '@/shared/ui/select'
 import { Textarea } from '@/shared/ui/textarea'
 import { Button } from '@/shared/ui/button'
+import { Checkbox } from '@/shared/ui/checkbox'
 import { cn } from '@/shared/utils/cn'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -58,8 +59,8 @@ export function ConditionalForm() {
     <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-xl space-y-4">
       {/* Account type segmented */}
       <div>
-        <label className="block text-[13px] font-medium text-zinc-700 mb-1.5">Account type</label>
-        <div className="grid grid-cols-3 gap-2">
+        <p id="account-type-label" className="block text-[13px] font-medium text-zinc-700 mb-1.5">Account type</p>
+        <div role="radiogroup" aria-labelledby="account-type-label" className="grid grid-cols-3 gap-2">
           {(['personal', 'business', 'nonprofit'] as const).map((type) => (
             <button
               key={type}
@@ -67,7 +68,7 @@ export function ConditionalForm() {
               onClick={() => form.setValue('accountType', type, { shouldValidate: true })}
               className={cn(
                 'px-3 py-2 rounded-lg border text-[13px] font-medium capitalize transition-colors cursor-pointer',
-                accountType === type ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-600 border-zinc-200 hover:border-zinc-400'
+                accountType === type ? 'bg-accent text-accent-fg border-accent' : 'bg-white text-zinc-600 border-zinc-200 hover:border-zinc-400'
               )}
             >
               {type}
@@ -107,12 +108,17 @@ export function ConditionalForm() {
       <Input label="Contact Email" type="email" {...form.register('contactEmail')} error={form.formState.errors.contactEmail?.message} />
 
       {/* Toggle reveals another field */}
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- Checkbox is a button[role=checkbox]; text content is inline */}
       <label className="flex items-start gap-3 p-3 rounded-lg border border-zinc-200 cursor-pointer hover:border-zinc-300">
-        <input type="checkbox" {...form.register('needsInvoicing')} className="mt-0.5" />
-        <div>
-          <p className="text-[13px] font-medium text-zinc-900">Send invoices</p>
-          <p className="text-[12px] text-zinc-500 mt-0.5">Email monthly invoices to a separate billing address</p>
-        </div>
+        <Checkbox
+          checked={!!needsInvoicing}
+          onChange={(v) => form.setValue('needsInvoicing', v)}
+          className="mt-0.5"
+        />
+        <span className="block">
+          <span className="block text-[13px] font-medium text-zinc-900">Send invoices</span>
+          <span className="block text-[12px] text-zinc-500 mt-0.5">Email monthly invoices to a separate billing address</span>
+        </span>
       </label>
 
       <AnimatePresence>

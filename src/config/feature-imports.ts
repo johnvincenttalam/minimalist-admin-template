@@ -19,6 +19,7 @@ export const featureImports: Record<FeatureKey, () => Promise<unknown>> = {
   notifications:  () => import('@/features/notifications'),
   calendar:       () => import('@/features/calendar'),
   kanban:         () => import('@/features/kanban'),
+  map:            () => import('@/features/map'),
   profile:        () => import('@/features/profile'),
   uiKit:     () => import('@/features/ui-kit'),
   settings:  () => import('@/features/settings'),

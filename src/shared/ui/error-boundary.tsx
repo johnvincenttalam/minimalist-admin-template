@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
 import { AlertTriangle, RotateCw } from 'lucide-react'
+import { IconTile } from './icon-tile'
 
 interface Props {
   children: ReactNode
@@ -44,9 +45,7 @@ function DefaultFallback({ error, reset }: { error: Error; reset: () => void }) 
   return (
     <div className="flex items-center justify-center min-h-[400px] p-6">
       <div className="max-w-md text-center">
-        <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mx-auto mb-4">
-          <AlertTriangle className="w-5 h-5 text-red-500" />
-        </div>
+        <IconTile icon={AlertTriangle} size="lg" tone="red" className="mx-auto mb-4" />
         <h2 className="text-lg font-semibold text-zinc-900 mb-2">Something went wrong</h2>
         <p className="text-[13px] text-zinc-500 mb-4">
           {error.message || 'An unexpected error occurred while rendering this page.'}

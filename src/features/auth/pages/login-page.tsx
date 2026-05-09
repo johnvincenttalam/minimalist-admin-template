@@ -5,7 +5,7 @@ import { z } from 'zod/v4'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff } from 'lucide-react'
-import { useAuthStore, getDefaultRoute } from '@/features/auth/store/auth-store'
+import { useAuth, useAuthStore, getDefaultRoute } from '@/features/auth/store/auth-store'
 import { appConfig } from '@/config/app'
 import { Button } from '@/shared/ui/button'
 import { toast } from 'sonner'
@@ -19,7 +19,7 @@ type LoginForm = z.infer<typeof loginSchema>
 
 export function LoginPage() {
   const navigate = useNavigate()
-  const { login } = useAuthStore()
+  const { login } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -91,8 +91,8 @@ export function LoginPage() {
         >
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center">
-              <Logo className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
+              <Logo className="w-6 h-6 text-accent-fg" />
             </div>
             <span className="text-xl font-bold text-zinc-800">{appConfig.name}</span>
           </div>
@@ -108,8 +108,9 @@ export function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="block text-xs font-medium text-zinc-700">Email</label>
+              <label htmlFor="login-email" className="block text-xs font-medium text-zinc-700">Email</label>
               <input
+                id="login-email"
                 type="email"
                 {...register('email')}
                 className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-400 transition-all"
@@ -119,9 +120,10 @@ export function LoginPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-medium text-zinc-700">Password</label>
+              <label htmlFor="login-password" className="block text-xs font-medium text-zinc-700">Password</label>
               <div className="relative">
                 <input
+                  id="login-password"
                   type={showPassword ? 'text' : 'password'}
                   {...register('password')}
                   className="w-full px-4 py-3 pr-12 bg-white border border-zinc-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-400 transition-all"

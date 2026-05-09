@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Bell, UserPlus, AlertTriangle, CheckCircle2, Info, Clock } from 'lucide-react'
+import { Bell, UserPlus, AlertTriangle, CheckCircle2, Info, Clock, type LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
-import { useClickOutside } from '@/shared/hooks/use-click-outside'
-import type { LucideIcon } from 'lucide-react'
+import { IconTile } from '@/shared/ui/icon-tile'
+import { Popover } from '@/shared/ui/popover'
 
 interface Notification {
   id: string
@@ -29,49 +29,41 @@ const typeDot: Record<string, string> = {
   danger: 'bg-red-500',
 }
 
-const typeIconBg: Record<string, string> = {
-  info: 'bg-blue-50',
-  warning: 'bg-amber-50',
-  success: 'bg-emerald-50',
-  danger: 'bg-red-50',
-}
-
-const typeIconColor: Record<string, string> = {
-  info: 'text-blue-600',
-  warning: 'text-amber-500',
-  success: 'text-emerald-600',
-  danger: 'text-red-500',
+const typeTone: Record<string, 'blue' | 'amber' | 'emerald' | 'red'> = {
+  info: 'blue',
+  warning: 'amber',
+  success: 'emerald',
+  danger: 'red',
 }
 
 export function NotificationCenter() {
-  const [open, setOpen] = useState(false)
   const [notifications, setNotifications] = useState(mockNotifications)
-  const ref = useRef<HTMLDivElement>(null)
-
   const unreadCount = notifications.filter(n => !n.read).length
-
-  useClickOutside(ref, () => setOpen(false), open)
 
   const markAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })))
   }
 
   return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen(!open)}
-        aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
-        aria-expanded={open}
-        className="relative p-2 rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 transition-colors"
-      >
-        <Bell className="w-[18px] h-[18px]" />
-        {unreadCount > 0 && (
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
-        )}
-      </button>
-
-      {open && (
-        <div className="absolute right-0 top-full mt-1.5 w-80 sm:w-96 bg-white rounded-xl border border-zinc-200/60 z-50 overflow-hidden">
+    <Popover
+      align="right"
+      width="w-80 sm:w-96"
+      trigger={({ open, toggle }) => (
+        <button
+          onClick={toggle}
+          aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
+          aria-expanded={open}
+          className="relative p-2 rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 transition-colors"
+        >
+          <Bell className="w-[18px] h-[18px]" />
+          {unreadCount > 0 && (
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
+          )}
+        </button>
+      )}
+    >
+      {({ close }) => (
+        <>
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100">
             <div className="flex items-center gap-2">
@@ -93,13 +85,11 @@ export function NotificationCenter() {
               <div
                 key={n.id}
                 className={cn(
-                  'flex items-start gap-3 px-4 py-3 border-b border-zinc-50 transition-colors hover:bg-zinc-50/50',
+                  'flex items-start gap-3 px-4 py-3 border-b border-zinc-50 transition-colors hover:bg-zinc-50',
                   !n.read && 'bg-zinc-50/30'
                 )}
               >
-                <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5', typeIconBg[n.type])}>
-                  <n.icon className={cn('w-4 h-4', typeIconColor[n.type])} />
-                </div>
+                <IconTile icon={n.icon} size="sm" tone={typeTone[n.type]} className="mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className={cn('text-[13px] truncate', n.read ? 'text-zinc-600' : 'font-medium text-zinc-900')}>
@@ -121,14 +111,14 @@ export function NotificationCenter() {
           <div className="px-4 py-2.5 border-t border-zinc-100 text-center">
             <Link
               to="/admin/notifications"
-              onClick={() => setOpen(false)}
+              onClick={close}
               className="text-[12px] font-medium text-zinc-500 hover:text-zinc-700 transition-colors"
             >
               View all notifications
             </Link>
           </div>
-        </div>
+        </>
       )}
-    </div>
+    </Popover>
   )
 }

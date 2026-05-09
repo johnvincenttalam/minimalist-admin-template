@@ -9,6 +9,7 @@ export const features = {
   notifications: true,
   calendar: true,
   kanban: true,
+  map: true,
   profile: true,
   uiKit: true,
   settings: true,

@@ -19,6 +19,8 @@ import { PageHeader } from '@/shared/ui/page-header'
 import { Card, CardContent } from '@/shared/ui/card'
 import { Tabs } from '@/shared/ui/tabs'
 import { Button } from '@/shared/ui/button'
+import { EmptyState } from '@/shared/ui/empty-state'
+import { CalendarDays } from 'lucide-react'
 import { CalendarGrid } from '../components/calendar-grid'
 import { EventModal } from '../components/event-modal'
 import { mockEvents } from '../data/mock-events'
@@ -208,7 +210,7 @@ export function CalendarPage() {
                 )}
               </h3>
               {dayEvents.length === 0 ? (
-                <p className="text-[13px] text-zinc-400 py-8 text-center">No events for this day</p>
+                <EmptyState icon={CalendarDays} title="No events for this day" description="Create one to fill it in." />
               ) : (
                 dayEvents.map((e) => (
                   <button

@@ -40,6 +40,7 @@ export function WizardForm() {
   const next = async () => {
     const fields = steps[step].fields
     if (fields.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- step field name lists are typed as string[]; react-hook-form's Path<T>[] is the exact shape but threading the generic isn't worth the complexity for a wizard demo.
       const ok = await form.trigger(fields as any)
       if (!ok) return
     }
@@ -65,7 +66,7 @@ export function WizardForm() {
             <div className={cn(
               'w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold flex-shrink-0 transition-colors',
               i < step && 'bg-emerald-500 text-white',
-              i === step && 'bg-zinc-900 text-white',
+              i === step && 'bg-accent text-accent-fg',
               i > step && 'bg-zinc-100 text-zinc-500'
             )}>
               {i < step ? <Check className="w-3.5 h-3.5" /> : i + 1}

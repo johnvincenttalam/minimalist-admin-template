@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Upload, File, X, Image as ImageIcon, FileText } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/shared/ui/button'
+import { IconTile } from '@/shared/ui/icon-tile'
 import { cn } from '@/shared/utils/cn'
 
 interface UploadedFile {
@@ -79,14 +80,20 @@ export function UploadForm() {
   return (
     <div className="max-w-2xl space-y-4">
       <div
+        role="button"
+        tabIndex={0}
+        aria-label="Upload files"
         onDragEnter={(e) => onDrag(e, true)}
         onDragOver={(e) => onDrag(e, true)}
         onDragLeave={(e) => onDrag(e, false)}
         onDrop={onDrop}
         onClick={() => inputRef.current?.click()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.click() }
+        }}
         className={cn(
-          'relative border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors',
-          dragActive ? 'border-zinc-900 bg-zinc-50' : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50/50'
+          'relative border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-accent/30',
+          dragActive ? 'border-accent bg-accent/5' : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50/50'
         )}
       >
         <input
@@ -96,9 +103,7 @@ export function UploadForm() {
           className="hidden"
           onChange={(e) => addFiles(e.target.files)}
         />
-        <div className="w-12 h-12 rounded-xl bg-zinc-100 flex items-center justify-center mx-auto mb-3">
-          <Upload className="w-5 h-5 text-zinc-500" />
-        </div>
+        <IconTile icon={Upload} size="lg" className="mx-auto mb-3" />
         <p className="text-sm font-medium text-zinc-900">
           {dragActive ? 'Drop files here' : 'Click to upload or drag and drop'}
         </p>
@@ -114,9 +119,7 @@ export function UploadForm() {
                 {entry.preview ? (
                   <img src={entry.preview} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
                 ) : (
-                  <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-4 h-4 text-zinc-500" />
-                  </div>
+                  <IconTile icon={Icon} />
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
@@ -125,7 +128,7 @@ export function UploadForm() {
                   </div>
                   <div className="mt-1.5 h-1 rounded-full bg-zinc-100 overflow-hidden">
                     <div
-                      className={cn('h-full rounded-full transition-all duration-200', entry.progress >= 100 ? 'bg-emerald-500' : 'bg-zinc-900')}
+                      className={cn('h-full rounded-full transition-all duration-200', entry.progress >= 100 ? 'bg-emerald-500' : 'bg-accent')}
                       style={{ width: `${entry.progress}%` }}
                     />
                   </div>

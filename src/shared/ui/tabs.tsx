@@ -23,7 +23,7 @@ export function Tabs({ items, value, onChange, className }: TabsProps) {
           className={cn(
             'px-3 py-2.5 text-[13px] font-medium transition-colors border-b-2 -mb-px cursor-pointer',
             value === item.value
-              ? 'border-zinc-900 text-zinc-900'
+              ? 'border-accent text-accent'
               : 'border-transparent text-zinc-400 hover:text-zinc-700'
           )}
         >
@@ -32,7 +32,7 @@ export function Tabs({ items, value, onChange, className }: TabsProps) {
             <span className={cn(
               'ml-1.5 min-w-[20px] inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[11px] font-semibold',
               value === item.value
-                ? 'bg-zinc-900 text-white'
+                ? 'bg-accent text-accent-fg'
                 : 'bg-zinc-200/60 text-zinc-500'
             )}>
               {item.count}

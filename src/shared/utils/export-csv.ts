@@ -1,25 +1,25 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function exportToCSV(
-  data: any[],
+export function exportToCSV<T extends object>(
+  data: T[],
   filename: string,
-  columns?: { key: string; label: string }[]
+  columns?: { key: keyof T & string; label: string }[]
 ) {
   if (data.length === 0) return
 
-  const keys = columns?.map(c => c.key) ?? Object.keys(data[0])
+  const keys = (columns?.map(c => c.key) ?? Object.keys(data[0])) as (keyof T & string)[]
   const headers = columns?.map(c => c.label) ?? keys
 
   const csvRows = [
     headers.join(','),
-    ...data.map(row =>
-      keys.map(key => {
-        const val = row[key]
+    ...data.map(row => {
+      const r = row as Record<string, unknown>
+      return keys.map(key => {
+        const val = r[key]
         const str = val === null || val === undefined ? '' : String(val)
         return str.includes(',') || str.includes('"') || str.includes('\n')
           ? `"${str.replace(/"/g, '""')}"`
           : str
       }).join(',')
-    ),
+    }),
   ]
 
   const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' })

@@ -29,14 +29,14 @@ export function Checkbox({ checked, indeterminate, onChange, disabled, size = 's
       className={cn(
         'border flex items-center justify-center transition-colors flex-shrink-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed',
         box, radius,
-        active ? 'bg-zinc-900 border-zinc-900' : 'bg-white border-zinc-300 hover:border-zinc-400',
+        active ? 'bg-accent border-accent' : 'bg-white border-zinc-300 hover:border-zinc-400',
         className
       )}
     >
       {indeterminate ? (
-        <Minus className={cn(icon, 'text-white')} strokeWidth={3} />
+        <Minus className={cn(icon, 'text-accent-fg')} strokeWidth={3} />
       ) : checked ? (
-        <Check className={cn(icon, 'text-white')} strokeWidth={3} />
+        <Check className={cn(icon, 'text-accent-fg')} strokeWidth={3} />
       ) : null}
     </button>
   )

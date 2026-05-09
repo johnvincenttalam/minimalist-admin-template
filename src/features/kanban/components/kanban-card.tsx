@@ -28,11 +28,17 @@ interface KanbanCardProps {
 export function KanbanCard({ task, onDragStart, onClick }: KanbanCardProps) {
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label={`Open task: ${task.title}`}
       draggable
       onDragStart={(e) => onDragStart(e, task.id)}
       onClick={() => onClick(task)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(task) }
+      }}
       className={cn(
-        'p-3 bg-white rounded-lg border border-zinc-200/60 cursor-grab active:cursor-grabbing',
+        'p-3 bg-white rounded-lg border border-zinc-200/60 cursor-grab active:cursor-grabbing focus:outline-none focus:ring-2 focus:ring-accent/30',
         'hover:border-zinc-300 hover:shadow-sm transition-all',
       )}
     >

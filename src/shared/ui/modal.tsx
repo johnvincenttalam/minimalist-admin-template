@@ -72,6 +72,7 @@ export function Modal({ open, onClose, title, size = 'md', children, footer }: M
   return (
     <AnimatePresence>
       {open && (
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- role="dialog" is interactive; onKeyDown handles ESC + focus trap
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           role="dialog"

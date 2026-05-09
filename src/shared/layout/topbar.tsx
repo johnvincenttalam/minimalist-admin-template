@@ -1,11 +1,12 @@
 import { cn } from '@/shared/utils/cn'
 import { Menu, Search, LogOut, User, Sun, Moon } from 'lucide-react'
-import { useAuthStore } from '@/features/auth/store/auth-store'
-import { useThemeStore } from '@/shared/stores/theme-store'
+import { useAuth } from '@/features/auth/store/auth-store'
+import { useTheme } from '@/shared/stores/theme-store'
 import { NotificationCenter } from '@/shared/layout/notification-center'
-import { useClickOutside } from '@/shared/hooks/use-click-outside'
+import { Avatar } from '@/shared/ui/avatar'
+import { Popover } from '@/shared/ui/popover'
+import { MenuItem } from '@/shared/ui/menu'
 import { useNavigate } from 'react-router-dom'
-import { useState, useRef } from 'react'
 
 interface TopbarProps {
   sidebarCollapsed: boolean
@@ -13,21 +14,14 @@ interface TopbarProps {
 }
 
 export function Topbar({ sidebarCollapsed, onToggleMobileSidebar }: TopbarProps) {
-  const { user, logout } = useAuthStore()
-  const { theme, toggle: toggleTheme } = useThemeStore()
+  const { user, logout } = useAuth()
+  const { theme, toggle: toggleTheme } = useTheme()
   const navigate = useNavigate()
-  const [showProfile, setShowProfile] = useState(false)
-  const profileRef = useRef<HTMLDivElement>(null)
-
-  useClickOutside(profileRef, () => setShowProfile(false), showProfile)
 
   const handleLogout = async () => {
     await logout()
     navigate('/login')
   }
-
-  const getInitials = (name: string) =>
-    name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
 
   return (
     <header
@@ -74,49 +68,42 @@ export function Topbar({ sidebarCollapsed, onToggleMobileSidebar }: TopbarProps)
         <NotificationCenter />
 
         {/* Profile */}
-        <div ref={profileRef} className="relative">
-          <button
-            onClick={() => setShowProfile(!showProfile)}
-            aria-label="Open profile menu"
-            aria-expanded={showProfile}
-            className="flex items-center gap-2.5 p-1.5 pr-3 rounded-lg hover:bg-zinc-50 transition-colors"
-          >
-            <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center">
-              <span className="text-white text-[11px] font-medium">
-                {user ? getInitials(user.name) : 'U'}
-              </span>
-            </div>
-            <div className="hidden sm:block text-left">
-              <p className="text-[13px] font-medium text-zinc-700 leading-tight">
-                {user?.name ?? 'User'}
-              </p>
-              <p className="text-[11px] text-zinc-400 capitalize">{user?.role ?? 'admin'}</p>
-            </div>
-          </button>
-
-          {showProfile && (
-            <div className="absolute right-0 top-full mt-1.5 w-52 bg-white rounded-xl border border-zinc-200/60 py-1.5 z-50">
+        <Popover
+          align="right"
+          width="w-52"
+          panelClassName="py-1.5"
+          trigger={({ open, toggle }) => (
+            <button
+              onClick={toggle}
+              aria-label="Open profile menu"
+              aria-expanded={open}
+              className="flex items-center gap-2.5 p-1.5 pr-3 rounded-lg hover:bg-zinc-50 transition-colors"
+            >
+              <Avatar name={user?.name ?? 'User'} size="sm" tone="accent" className="w-7 h-7" />
+              <div className="hidden sm:block text-left">
+                <p className="text-[13px] font-medium text-zinc-700 leading-tight">
+                  {user?.name ?? 'User'}
+                </p>
+                <p className="text-[11px] text-zinc-400 capitalize">{user?.role ?? 'admin'}</p>
+              </div>
+            </button>
+          )}
+        >
+          {({ close }) => (
+            <>
               <div className="px-3 py-2 border-b border-zinc-100">
                 <p className="text-[13px] font-medium text-zinc-700">{user?.name}</p>
                 <p className="text-[11px] text-zinc-400">{user?.email}</p>
               </div>
-              <button
-                onClick={() => { setShowProfile(false); navigate('/admin/settings') }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-zinc-600 hover:bg-zinc-50 transition-colors"
-              >
-                <User className="w-4 h-4" />
+              <MenuItem icon={User} onClick={() => { close(); navigate('/admin/settings') }}>
                 Profile Settings
-              </button>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
+              </MenuItem>
+              <MenuItem icon={LogOut} tone="danger" onClick={handleLogout}>
                 Sign Out
-              </button>
-            </div>
+              </MenuItem>
+            </>
           )}
-        </div>
+        </Popover>
       </div>
     </header>
   )

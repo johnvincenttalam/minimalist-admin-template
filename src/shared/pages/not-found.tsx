@@ -20,7 +20,7 @@ export function NotFoundPage() {
         </p>
         <Link
           to="/login"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-zinc-900 text-white rounded-lg text-[13px] font-medium hover:bg-zinc-800 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-accent-fg rounded-lg text-[13px] font-medium hover:bg-accent-hover transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to home

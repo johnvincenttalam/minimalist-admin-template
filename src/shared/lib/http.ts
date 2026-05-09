@@ -2,6 +2,19 @@ import { env } from '@/shared/env'
 import { authAdapter } from '@/features/auth/adapters'
 
 /**
+ * Optional handler invoked when a request returns 401. Wired up once at app
+ * boot from inside the router context (see AppProviders) so we can use
+ * react-router navigate instead of a full-page reload.
+ *
+ * If unset (e.g. in tests), the request just throws HttpError as usual.
+ */
+let unauthorizedHandler: (() => void) | null = null
+
+export function setUnauthorizedHandler(fn: (() => void) | null) {
+  unauthorizedHandler = fn
+}
+
+/**
  * Thrown for any non-2xx response. Includes status and the parsed body (if JSON).
  */
 export class HttpError extends Error {
@@ -75,7 +88,15 @@ async function request<T>(method: HttpMethod, path: string, options: RequestOpti
   if (!response.ok) {
     if (response.status === 401 && !skipAuth) {
       await authAdapter.logout()
-      window.location.href = '/login'
+      // Prefer the router-aware handler (registered by AppProviders) so we
+      // don't hard-reload and lose React Router state. Fall back to a hard
+      // redirect only if no bridge is wired (e.g. http used outside a React
+      // tree, or the bridge hasn't mounted yet).
+      if (unauthorizedHandler) {
+        unauthorizedHandler()
+      } else if (typeof window !== 'undefined') {
+        window.location.href = '/login'
+      }
     }
 
     const errorBody = await parseBody(response).catch(() => null)

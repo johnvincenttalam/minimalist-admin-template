@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Mail, Phone, MapPin, Shield, Monitor, Smartphone, LogOut } from 'lucide-react'
-import { useAuthStore } from '@/features/auth/store/auth-store'
+import { useAuth } from '@/features/auth/store/auth-store'
 import { PageHeader } from '@/shared/ui/page-header'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Avatar } from '@/shared/ui/avatar'
@@ -11,6 +11,7 @@ import { Button } from '@/shared/ui/button'
 import { Tabs } from '@/shared/ui/tabs'
 import { Badge } from '@/shared/ui/badge'
 import { Toggle } from '@/shared/ui/toggle'
+import { IconTile } from '@/shared/ui/icon-tile'
 
 const mockSessions = [
   { id: '1', device: 'Chrome on macOS', location: 'San Francisco, US', lastActive: '2 minutes ago', current: true, icon: Monitor },
@@ -19,7 +20,7 @@ const mockSessions = [
 ]
 
 export function ProfilePage() {
-  const { user } = useAuthStore()
+  const { user } = useAuth()
   const [tab, setTab] = useState('profile')
   const [twoFA, setTwoFA] = useState(false)
 
@@ -91,9 +92,7 @@ export function ProfilePage() {
         <Card>
           <CardContent className="p-6 space-y-6 max-w-2xl">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                <Shield className="w-5 h-5 text-blue-600" />
-              </div>
+              <IconTile icon={Shield} tone="blue" />
               <div className="flex-1">
                 <div className="flex items-center justify-between gap-4">
                   <div>
@@ -126,9 +125,7 @@ export function ProfilePage() {
           <CardContent className="p-6 pt-0 space-y-2">
             {mockSessions.map((session) => (
               <div key={session.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-zinc-50 transition-colors">
-                <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0">
-                  <session.icon className="w-5 h-5 text-zinc-500" />
-                </div>
+                <IconTile icon={session.icon} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-[13px] font-medium text-zinc-900">{session.device}</p>

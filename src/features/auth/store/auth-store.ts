@@ -9,7 +9,6 @@ interface AuthState {
   login: (email: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
   restore: () => Promise<void>
-  setUser: (user: User) => void
 }
 
 const roleRouteMap: Record<UserRole, string> = {
@@ -43,10 +42,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     const user = await authAdapter.getCurrentUser()
     set({ user, isAuthenticated: !!user, isRestoring: false })
   },
-
-  setUser: (user) => {
-    set({ user, isAuthenticated: true })
-  },
 }))
 
 /**
@@ -55,4 +50,19 @@ export const useAuthStore = create<AuthState>((set) => ({
  */
 export function initAuth() {
   useAuthStore.getState().restore()
+}
+
+/**
+ * Ergonomic hook over useAuthStore — also fixes the whole-store re-render
+ * footgun by using selectors for each slice. Prefer this in components;
+ * reach for useAuthStore directly only when you need raw store access
+ * (e.g. tests calling setState).
+ */
+export function useAuth() {
+  const user = useAuthStore((s) => s.user)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const isRestoring = useAuthStore((s) => s.isRestoring)
+  const login = useAuthStore((s) => s.login)
+  const logout = useAuthStore((s) => s.logout)
+  return { user, isAuthenticated, loading: isRestoring, login, logout }
 }

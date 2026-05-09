@@ -112,7 +112,7 @@ export function RolesPage() {
                   >
                     <div className={cn(
                       'w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0',
-                      selectedRoleId === role.id ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-500'
+                      selectedRoleId === role.id ? 'bg-accent text-accent-fg' : 'bg-zinc-100 text-zinc-500'
                     )}>
                       <Shield className="w-4 h-4" />
                     </div>

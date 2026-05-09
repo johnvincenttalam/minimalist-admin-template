@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AdminLayout } from '@/shared/layout/admin-layout'
 import { ProtectedRoute } from '@/features/auth/components/protected-route'
+import { GuestRoute } from '@/features/auth/components/guest-route'
 import { Spinner } from '@/shared/ui/spinner'
 import { ErrorBoundary } from '@/shared/ui/error-boundary'
 import { features } from '@/config/features'
@@ -19,6 +20,7 @@ const ActivityPage = lazy(() => featureImports.activity().then((m: any) => ({ de
 const NotificationsPage = lazy(() => featureImports.notifications().then((m: any) => ({ default: m.NotificationsPage })))
 const CalendarPage = lazy(() => featureImports.calendar().then((m: any) => ({ default: m.CalendarPage })))
 const KanbanPage = lazy(() => featureImports.kanban().then((m: any) => ({ default: m.KanbanPage })))
+const MapPage = lazy(() => featureImports.map().then((m: any) => ({ default: m.MapPage })))
 const ProfilePage = lazy(() => featureImports.profile().then((m: any) => ({ default: m.ProfilePage })))
 const AdvancedTablePage = lazy(() => featureImports.table().then((m: any) => ({ default: m.AdvancedTablePage })))
 const OrderDetailPage = lazy(() => featureImports.table().then((m: any) => ({ default: m.OrderDetailPage })))
@@ -46,7 +48,7 @@ function Lazy({ children }: { children: React.ReactNode }) {
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
       <Route path="/" element={<Navigate to="/login" replace />} />
 
       <Route
@@ -68,6 +70,7 @@ export function AppRoutes() {
         {features.notifications && <Route path="notifications" element={<Lazy><NotificationsPage /></Lazy>} />}
         {features.calendar && <Route path="calendar" element={<Lazy><CalendarPage /></Lazy>} />}
         {features.kanban && <Route path="kanban" element={<Lazy><KanbanPage /></Lazy>} />}
+        {features.map && <Route path="map" element={<Lazy><MapPage /></Lazy>} />}
         {features.profile && <Route path="profile" element={<Lazy><ProfilePage /></Lazy>} />}
         {features.uiKit && <Route path="ui-kit" element={<Lazy><UIKitPage /></Lazy>} />}
         {features.settings && <Route path="settings" element={<Lazy><SettingsPage /></Lazy>} />}
