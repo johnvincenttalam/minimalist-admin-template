@@ -307,7 +307,7 @@ Two implementations ship:
 
 | Adapter | What it does |
 |-|-|
-| `mockAuthAdapter` (default) | Matches any email in `mockUsers` with any password. Stores user id in localStorage. **Throws at runtime if active in a production build.** |
+| `mockAuthAdapter` (default) | Matches any email in `mockUsers` with any password. Stores user id in localStorage. Intended for local dev and public demos — swap to `httpAuthAdapter` before shipping a real app. |
 | `httpAuthAdapter` | POSTs to `/auth/login`, `/auth/logout`, `GET /auth/me`. Stores JWT in namespaced localStorage. |
 
 Swap by uncommenting one line in `features/auth/adapters/index.ts`:

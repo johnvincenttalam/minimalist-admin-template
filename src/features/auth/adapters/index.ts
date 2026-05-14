@@ -11,15 +11,4 @@ import type { AuthAdapter } from './auth-adapter'
  */
 export const authAdapter: AuthAdapter = mockAuthAdapter
 
-// Production safety net: mockAuthAdapter accepts any password and is intended
-// for local dev only. If a build ships with mock auth still wired, fail loud
-// at app boot rather than silently authenticating anyone who knows an email.
-if (import.meta.env.PROD && authAdapter === mockAuthAdapter) {
-  throw new Error(
-    'mockAuthAdapter is active in a production build. Swap to a real ' +
-    'AuthAdapter (e.g. httpAuthAdapter) in features/auth/adapters/index.ts ' +
-    'before deploying.',
-  )
-}
-
 export type { AuthAdapter } from './auth-adapter'
